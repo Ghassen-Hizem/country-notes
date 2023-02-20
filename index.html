@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+let arr = [];
+fetch(endpoint).then(
+    (response) => response.json()).then(
+        (data) =>  {
+            arr = data;
+        }
+    )
+
+document.querySelector(".search").addEventListener("input",(event)=>{
+
+    document.getElementsByClassName("suggestions")[0].innerHTML = '';
+  let arr2 = arr.filter((element) => {
+    if(element.city.toUpperCase().includes(event.target.value.toUpperCase())){
+        
+        return true;
+        
+    }
+    else if (element.state.toUpperCase().includes(event.target.value.toUpperCase())) {  
+        return true;
+    } else {
+        return false;
+    }
+   })                  
+   arr2.forEach(element => {
+    li = document.createElement('li');
+    if(element.city.toUpperCase().includes(event.target.value.toUpperCase())) {
+        m = document.createElement('mark');
+        m.textContent = `${element.city}`; 
+        li.appendChild(m);
+        li.innerHTML += ", " + `${element.state}`;
+    }
+    else {
+        m = document.createElement('mark');
+        m.textContent = `${element.state}`; 
+        
+        li.innerHTML += `${element.city}` + ", "  ;
+        li.appendChild(m);
+    }
+    if(event.target.value == "") {
+        document.getElementsByClassName("suggestions")[0].innerHTML = '';
+        
+    }
+    
+    s = document.createElement('span');
+    s.textContent = `${element.population}`
+    s.style.textAlign = "right";
+    li.appendChild(s);
+    document.querySelector(".suggestions").appendChild(li);
+    
+});
+})
+
+
+
+
+</script>
+</body>
+</html>
